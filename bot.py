@@ -1,0 +1,48 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+from key import C_KEY1,C_SEACRET1,A_KEY1,A_SEACRET1,C_KEY2,C_SEACRET2,A_KEY2,A_SEACRET2
+from requests_oauthlib import OAuth1Session
+import json
+import sys
+import MeCab
+import random
+import re
+import time
+import threading
+
+while True:
+
+    def Search_words():
+        url = 'http://api.twitter.com/1.1/statuses/user_timeline.json'
+        params = {
+            "count": 1,
+            "exclude_replies": True,
+            "include_rts": False
+        }
+        tw = OAuth1Session(C_KEY1,C_SEACRET1,A_KEY1,A_SEACRET1)
+        req = tw.get(url,params = params)
+        tweets = json.loads(req.text)
+        for tweet in tweets["statuses"]:
+            f = open("tweet.txt" , "aw")
+            lists = (tweet["text"].encode("utf-8"))
+            if "http" in lists:
+                lists = lists.split("http",1)[0]
+                lists = lists.split("@")[0]
+                lists = lists.split("RT")[0]
+                
+                f.write(lists)
+                f.flush()
+                f.close()
+                
+    def scheduler(interval,f,wait = True):
+        base_time = time.time()
+        next_time = 0
+        while True:
+            t = threading.Thread(target = f)
+            t.start()
+            if wait():
+                t.join()
+            next_time = ((base_time - time.time()) %interval) or interval
+            time.sleep(next_time)
+            
+    
