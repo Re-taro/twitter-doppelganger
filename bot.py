@@ -26,7 +26,7 @@ while True:
             f = open("tweet.txt" , "aw")
             lists = (tweet["text"].encode("utf-8"))
             if "http" in lists:
-                lists = lists.split("http",1)[0]
+                lists = lists.split("http" , 1)[0]
                 lists = lists.split("@")[0]
                 lists = lists.split("RT")[0]
                 
@@ -45,3 +45,35 @@ while True:
             next_time = ((base_time - time.time()) %interval) or interval
             time.sleep(next_time)
             
+    def Mecab_file():
+        f = open("tweet.txt" , "rb")
+        data = f.read()
+        f.close()
+        
+        mt = MeCab.Tagger("-Owakati")
+        
+        wordlist = mt.parse(data)
+        wordlist = wordlist.rstrip(" \n").split(" ")
+        
+        markov = {}
+        w = ""
+        
+        for x in wordlist:
+            if w:
+                if markov.has_key(w):
+                    new_list =markov[w]
+                else:
+                    new_list = []
+                
+                new_list.append(x)
+                markov[w] = new_list
+            w = x
+        
+        choice_words = wordlist[0]
+        sentence = ""
+        count = 0
+
+
+
+
+
