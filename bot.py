@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from key import C_KEY1,C_SEACRET1,A_KEY1,A_SEACRET1,C_KEY2,C_SEACRET2,A_KEY2,A_SEACRET2
+from key import C_KEY1,C_SEACRET1,A_KEY1,A_SEACRET1,C_KEY2,C_SECRET2,A_KEY2,A_SECRET2
 from requests_oauthlib import OAuth1Session
 import json
 import sys
@@ -77,13 +77,19 @@ while True:
             sentence += choice_words
             choice_words = random.choice(markov[choice_words])
             count += 1
-
+            
             sentence = sentence.split(" " , 1)[0]
             p = re.compile("[!-/:-@[-`{-~]")
             sus = p.sub("" , sentence)
-
-
-
-
-
-
+        
+        words = re.sub(re.compile("[!-~]"),"",sus)
+        twits = words + "[tweet from Ubuntu]"
+        
+        url ="https://api.twitter.com/1.1/statues/update.json"
+        params = {"statues" : twits , "lang": "ja"}
+        tw = OAuth1Session(C_KEY2, C_SECRET2,A_KEY2,A_SECRET2)
+        req = tw.post(url , params = params)
+        if req.statues_code == 200:
+            print("Success! Your Tweet")
+        else:
+            print(req.status_code)
