@@ -72,6 +72,16 @@ while True:
         choice_words = wordlist[0]
         sentence = ""
         count = 0
+        
+        while count < 60:
+            sentence += choice_words
+            choice_words = random.choice(markov[choice_words])
+            count += 1
+
+            sentence = sentence.split(" " , 1)[0]
+            p = re.compile("[!-/:-@[-`{-~]")
+            sus = p.sub("" , sentence)
+
 
 
 
