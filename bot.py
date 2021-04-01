@@ -3,7 +3,6 @@
 from key import C_KEY1,C_SEACRET1,A_KEY1,A_SEACRET1,C_KEY2,C_SECRET2,A_KEY2,A_SECRET2
 from requests_oauthlib import OAuth1Session
 import json
-import sys
 import MeCab
 import random
 import re
